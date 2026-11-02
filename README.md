@@ -76,6 +76,18 @@ The values above are **local lab examples**; they are not externally reachable p
 
 **Example:** James Anderson, employee ID `1002`, is represented in midPoint as `name=1002`; his Entra account uses an email-shaped UPN in the tenant's `onmicrosoft.com` domain. **Identity** and **directory account** are deliberately different objects.
 
+**Verified Joiner evidence — Jamila Bah (employee ID `1008`):**
+
+A new active Sales employee was created in SimplifyHR and ingested by midPoint. After troubleshooting the initial Entra password-validation error, the completed test shows the identity in midPoint with a populated full name and an enabled account in Microsoft Entra ID. The Entra account displays **Department: Sales** and **Employee ID: 1008**, matching the HR source. The screenshots verify the final state, not the detailed remediation of the earlier error.
+
+| Evidence | Verification |
+|---|---|
+| ![SimplifyHR new joiner Jamila Bah 1008](images/joiner/01-simplifyhr-jamila-bah-1008.png) | Authoritative HR record: Jamila Bah, employee `1008`, Sales, cost center `SAL-001`, Active. |
+| ![midPoint new identity 1008](images/joiner/02-midpoint-jamila-bah-1008.png) | midPoint user `1008` has Full Name **Jamila Bah**, HR email and **3 accounts** displayed. |
+| ![Microsoft Entra ID provisioned account 1008](images/joiner/03-entra-jamila-bah-1008.png) | Entra ID account `jamila.bah@SoulbyLTD.onmicrosoft.com` is enabled, with Department **Sales** and Employee ID **1008**. |
+
+**Scope of proof:** These captures demonstrate the new HR identity and its provisioned Entra directory account with matching attributes. They do **not** independently prove all three midPoint projections are healthy, LDAP joiner provisioning, or the precise password-error remediation. See [Joiner evidence notes](docs/joiner-evidence.md) for a compact verification record.
+
 ### 4.2 Mover — department-driven access change
 
 The lab tested a department transition for James Anderson from **IT to HR**, including cost center **`IT-002` → `HR-003`**. After the HR change and reconciliation, midPoint showed **Organizational Unit: HR**, **Cost Center: HR-003**, and **HR Employee** assignment. Target verification included LDAP department/cost-center attributes and Entra department metadata.
@@ -245,7 +257,9 @@ This repository includes evidence captured during implementation, including both
 
 **Leaver:** `images/leaver/02-...png` through `14-...png`, documenting pre-termination projections, HR termination, disabled state, Entra soft deletion, LDAP inactive OU, and LDAP bind checks.
 
-**Mover evidence:** Five verified screenshots are included in `images/mover/`. Earlier Joiner screenshots may still require separate review.
+**Mover evidence:** Five verified screenshots are included in `images/mover/`.
+
+**Joiner evidence:** Three verified screenshots are included in `images/joiner/`, showing HR creation, midPoint identity creation, and the provisioned Entra account for employee `1008`.
 
 ## 10. Known limitations and next steps
 
@@ -256,7 +270,10 @@ This repository includes evidence captured during implementation, including both
 - [ ] Rotate any OIDC client secret that may have been exposed during testing; store secrets outside source control.
 - [ ] Replace lab-only `localhost` endpoints and local HTTP with an appropriate HTTPS deployment for any non-lab use.
 - [ ] Add an independently protected application using Entra ID SSO as a future extension.
-- [ ] Add remaining Joiner evidence, verify obsolete entitlement removal during Mover testing, and implement automated regression tests.
+- [x] Add verified HR → midPoint → Entra ID Joiner evidence for employee `1008`.
+- [ ] Verify the new Joiner’s LDAP projection and all account health statuses, verify obsolete entitlement removal during Mover testing, and implement automated regression tests.
+
+**Joiner screenshot redaction checklist (before public release):** Review `images/joiner/` for full names, employee IDs, UPNs, tenant domain, Entra object ID, and other employees visible in the HR and midPoint lists. Redact or crop as appropriate; keep identifiers consistent across evidence.
 
 **Mover screenshot redaction checklist (before public release):** Review all five `images/mover/` files for full names, email addresses, employee IDs, and internal HR records; mask any real or personally identifying details. The SimplifyHR screenshot also shows multiple employee records; crop or redact unrelated rows. Use consistent synthetic identifiers where possible.
 
