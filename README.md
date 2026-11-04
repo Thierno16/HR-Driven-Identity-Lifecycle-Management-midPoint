@@ -402,22 +402,13 @@ Evidence includes both successes and failures.
 | Graph 403 | [20](images/oidc/20-graph-403-forbidden.png) |
 | Token exchange network error | [21](images/oidc/21-debug-log-network-unreachable.png) |
 
-## 13. Security and publishing guidance
+## 13. Security and publishing notes
 
-**Review and redact every screenshot before pushing to a public repository.** Do not publish client secrets, tokens, `.env` files, real credentials, or unsanitized authentication logs. An encrypted value visible in a screenshot is still sensitive.
+This is a local lab. Before publication, all screenshots were reviewed and redacted: tenant identifiers, user principal names and personal data were masked or replaced with synthetic values. The repository contains no client secrets, tokens, `.env` files, exported resource XML or unsanitized logs. Endpoints such as `http://localhost:8080` are lab values and are not publicly reachable.
 
-**Redaction checklist**
+Secrets used during the lab were rotated after testing, and temporary DEBUG logging and test accounts were removed.
 
-| Folder | Check for |
-|---|---|
-| `images/joiner/` | Full names, employee IDs, UPNs, tenant domain, Entra object ID, other employees in HR and midPoint lists |
-| `images/mover/` | Names, email addresses, employee IDs, unrelated rows in the SimplifyHR list (crop them) |
-| `images/leaver/` | Same as above, plus Entra deleted-user details |
-| `images/oidc/` | Tenant and app IDs, admin names, authorization request parameters, encrypted secret metadata |
-
-Use consistent synthetic identifiers where possible, and see the [OIDC redaction checklist](docs/oidc-implementation.md#screenshot-redaction-checklist). Also keep exported midPoint XML (user and resource objects) out of the repo: it contains the tenant name and encrypted bind passwords.
-
-Suggested `.gitignore`:
+If you reproduce the lab, keep credentials out of source control. Suggested `.gitignore`:
 
 ```gitignore
 .env
@@ -431,7 +422,6 @@ Suggested `.gitignore`:
 oidc.txt
 logs/
 ```
-
 ## 14. What this project demonstrates
 
 - **IAM / IGA engineering:** authoritative HR integration, correlation, provisioning, reconciliation, lifecycle automation.
